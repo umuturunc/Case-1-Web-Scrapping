@@ -41,6 +41,17 @@ for hisseLink in hisselerHrefs:
     
 print(hisselerDictionary)
 
+#verileri json dosyasına yazdır
 with open('mynet.json', 'w', encoding='utf-8') as f:
     json.dump(hisselerDictionary, f, ensure_ascii=False, indent=4)
 
+#çekilen verileri mongodb'ye yazma
+from pymongo import MongoClient
+#localhost:27017'de çalışan mongodb bağlantısı
+client = MongoClient('localhost', port=27017)
+#mynet-database adında veritabanı oluşturuluyor
+db = client["mynet-database"]
+#jsondata adında tablo oluşturuluyor
+col = db["jsondata"]
+#siteden çekilip dictionary veri yapısında tutulan veriler bir satıra ekleniyor
+result = db.jsondata.insert_one(data)
